@@ -48,36 +48,58 @@ const MessageInput = () => {
   };
 
   return (
-    <div className="p-4 w-full">
+    <div className="p-6 w-full bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border-t border-white/20 dark:border-slate-700/50">
       {imagePreview && (
-        <div className="mb-3 flex items-center gap-2">
-          <div className="relative">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="relative group">
             <img
               src={imagePreview}
               alt="Preview"
-              className="w-20 h-20 object-cover rounded-lg border border-zinc-700"
+              className="w-24 h-24 object-cover rounded-2xl border-2 border-white/20 dark:border-slate-600/30 shadow-lg group-hover:scale-105 transition-transform duration-300"
             />
             <button
               onClick={removeImage}
-              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-base-300
-              flex items-center justify-center"
+              className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
               type="button"
             >
               <X className="size-3" />
             </button>
           </div>
+          <div className="text-sm text-slate-600 dark:text-slate-400">
+            <p className="font-medium">Image ready to send</p>
+            <p className="text-xs">Click the send button to share</p>
+          </div>
         </div>
       )}
 
-      <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-        <div className="flex-1 flex gap-2">
-          <input
-            type="text"
-            className="w-full input input-bordered rounded-lg input-sm sm:input-md"
-            placeholder="Type a message..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
+      <form onSubmit={handleSendMessage} className="flex items-end gap-3">
+        <div className="flex-1 relative">
+          <div className="relative">
+            <input
+              type="text"
+              className="w-full input-modern rounded-2xl pr-12 py-4 text-base placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300"
+              placeholder="Type a message..."
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+            
+            {/* Image upload button */}
+            <button
+              type="button"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 group"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Image 
+                size={20} 
+                className={`transition-colors duration-300 ${
+                  imagePreview 
+                    ? "text-green-500 group-hover:text-green-600" 
+                    : "text-slate-400 group-hover:text-primary"
+                }`} 
+              />
+            </button>
+          </div>
+          
           <input
             type="file"
             accept="image/*"
@@ -85,22 +107,17 @@ const MessageInput = () => {
             ref={fileInputRef}
             onChange={handleImageChange}
           />
-
-          <button
-            type="button"
-            className={`hidden sm:flex btn btn-circle
-                     ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <Image size={20} />
-          </button>
         </div>
+        
         <button
           type="submit"
-          className="btn btn-sm btn-circle"
+          className="btn-modern group p-4 rounded-2xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
           disabled={!text.trim() && !imagePreview}
         >
-          <Send size={22} />
+          <Send 
+            size={20} 
+            className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" 
+          />
         </button>
       </form>
     </div>
